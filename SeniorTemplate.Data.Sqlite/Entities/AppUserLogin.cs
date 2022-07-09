@@ -5,5 +5,5 @@ namespace SeniorTemplate.Data.Entities;
 
 public class AppUserLogin : IdentityUserLogin<int>, IEntity
 {
-	public virtual AppUser? User { get; set; }
+    public virtual AppUser? User { get; set; }
 }

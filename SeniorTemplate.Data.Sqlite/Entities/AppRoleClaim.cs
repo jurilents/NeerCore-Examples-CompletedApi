@@ -5,5 +5,5 @@ namespace SeniorTemplate.Data.Entities;
 
 public class AppRoleClaim : IdentityRoleClaim<int>, IEntity
 {
-	public virtual AppRole? Role { get; set; }
+    public virtual AppRole? Role { get; set; }
 }

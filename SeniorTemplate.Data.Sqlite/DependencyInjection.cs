@@ -9,28 +9,28 @@ namespace SeniorTemplate.Data;
 
 public static class DependencyInjection
 {
-	public static void AddSqlServerDatabase(this IServiceCollection services, IConfiguration configuration)
-	{
-		services.AddDbContext();
-		services.AddIdentityServices(configuration);
-	}
+    public static void AddSqlServerDatabase(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddDbContext();
+        services.AddIdentityServices(configuration);
+    }
 
-	// =======================================================
+    // =======================================================
 
-	private static void AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
-	{
-		services.AddIdentity<AppUser, AppRole>(configuration.GetRequiredSection("Identity").Bind)
-				.AddEntityFrameworkStores<SqliteDbContext>()
-				.AddTokenProvider<EmailTokenProvider<AppUser>>("Default");
+    private static void AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddIdentity<AppUser, AppRole>(configuration.GetRequiredSection("Identity").Bind)
+            .AddEntityFrameworkStores<SqliteDbContext>()
+            .AddTokenProvider<EmailTokenProvider<AppUser>>("Default");
 
-		services.Configure<PasswordHasherOptions>(option => option.IterationCount = 10000);
-	}
+        services.Configure<PasswordHasherOptions>(option => option.IterationCount = 10000);
+    }
 
-	private static void AddDbContext(this IServiceCollection services)
-	{
-		var contextFactory = new SqliteDbContextFactory();
-		services.AddDbContext<SqliteDbContext>(cob => contextFactory.ConfigureContextOptions(cob));
+    private static void AddDbContext(this IServiceCollection services)
+    {
+        var contextFactory = new SqliteDbContextFactory();
+        services.AddDbContext<SqliteDbContext>(cob => contextFactory.ConfigureContextOptions(cob));
 
-		services.AddScoped<IDatabaseContext, SqliteDbContext>();
-	}
+        services.AddScoped<IDatabaseContext, SqliteDbContext>();
+    }
 }

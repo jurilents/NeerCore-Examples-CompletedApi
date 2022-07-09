@@ -8,18 +8,18 @@ using SeniorTemplate.Data.SeedData;
 namespace SeniorTemplate.Data.Context;
 
 public class SqliteDbContext : IdentityDbContext<AppUser, AppRole, int,
-	AppUserClaim, AppUserRole, AppUserLogin, AppRoleClaim, AppUserToken>, IDatabaseContext
+    AppUserClaim, AppUserRole, AppUserLogin, AppRoleClaim, AppUserToken>, IDatabaseContext
 {
-	public SqliteDbContext(DbContextOptions options) : base(options) { }
+    public SqliteDbContext(DbContextOptions options) : base(options) { }
 
 
-	protected override void OnModelCreating(ModelBuilder builder)
-	{
-		base.OnModelCreating(builder);
-		builder.ApplyConfigurationsFromCurrentAssembly();
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        base.OnModelCreating(builder);
+        builder.ApplyConfigurationsFromCurrentAssembly();
 
-		builder.SeedDefaultTeas();
-		builder.SeedDefaultUser();
-		builder.SeedDefaultRoles();
-	}
+        builder.SeedDefaultTeas();
+        builder.SeedDefaultUser();
+        builder.SeedDefaultRoles();
+    }
 }

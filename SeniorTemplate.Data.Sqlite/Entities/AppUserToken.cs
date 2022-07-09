@@ -5,8 +5,8 @@ namespace SeniorTemplate.Data.Entities;
 
 public class AppUserToken : IdentityUserToken<int>, IEntity
 {
-	public DateTime Created { get; set; } = DateTime.UtcNow;
+    public DateTime Created { get; set; } = DateTime.UtcNow;
 
 
-	public virtual AppUser? User { get; set; }
+    public virtual AppUser? User { get; set; }
 }
