@@ -15,22 +15,18 @@ public static class DependencyInjection
         services.AddIdentityServices(configuration);
     }
 
-    // =======================================================
-
-    private static void AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
-    {
-        services.AddIdentity<AppUser, AppRole>(configuration.GetRequiredSection("Identity").Bind)
-            .AddEntityFrameworkStores<SqliteDbContext>()
-            .AddTokenProvider<EmailTokenProvider<AppUser>>("Default");
-
-        services.Configure<PasswordHasherOptions>(option => option.IterationCount = 10000);
-    }
-
     private static void AddDbContext(this IServiceCollection services)
     {
         var contextFactory = new SqliteDbContextFactory();
         services.AddDbContext<SqliteDbContext>(cob => contextFactory.ConfigureContextOptions(cob));
 
         services.AddScoped<IDatabaseContext, SqliteDbContext>();
+    }
+
+    private static void AddIdentityServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddIdentity<AppUser, AppRole>(configuration.GetRequiredSection("Identity").Bind)
+            .AddEntityFrameworkStores<SqliteDbContext>()
+            .AddTokenProvider<EmailTokenProvider<AppUser>>("Default");
     }
 }

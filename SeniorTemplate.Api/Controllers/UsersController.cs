@@ -9,13 +9,13 @@ namespace SeniorTemplate.Api.Controllers;
 public class UsersController : MediatorController
 {
     [HttpGet("me")]
-    public async Task<User> MeAsync(CancellationToken cancel) =>
-        await Mediator.Send(new GetUserByUsernameQuery(User.GetUserName()), cancel);
+    public async Task<User> MeAsync() =>
+        await Mediator.Send(new GetUserByUsernameQuery(User.GetUserName()));
 
     [AllowAnonymous]
     [HttpGet("{username:alpha}")]
-    public async Task<User> OneAsync([FromRoute] string username, CancellationToken cancel) =>
-        await Mediator.Send(new GetUserByUsernameQuery(username), cancel);
+    public async Task<User> OneAsync([FromRoute] string username) =>
+        await Mediator.Send(new GetUserByUsernameQuery(username));
 
     // [HttpGet]
     // public async Task<User> FilterAsync([FromQuery] Filter filter, CancellationToken cancel) => 

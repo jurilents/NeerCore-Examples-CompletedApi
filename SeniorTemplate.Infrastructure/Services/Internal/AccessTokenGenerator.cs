@@ -54,16 +54,13 @@ public class AccessTokenGenerator
         };
 
         IEnumerable<string> roles = await GetUserRolesAsync(user.Id, cancel);
-
         claims.AddRange(roles.Select(role => new Claim(Claims.Role, role)));
-
         claims.AddRange(await GetUserClaimsAsync(user.Id, cancel));
         return claims;
     }
 
-    public async Task<IEnumerable<Claim>> GetUserClaimsAsync(long userId, CancellationToken cancel)
+    private async Task<IEnumerable<Claim>> GetUserClaimsAsync(long userId, CancellationToken cancel)
     {
-        // TODO: mb smth not works
         List<Claim> claims = await (from u in _database.Set<AppUserClaim>()
                 where u.UserId == userId
                 select new Claim(u.ClaimType, u.ClaimValue ?? "null"))
@@ -78,7 +75,7 @@ public class AccessTokenGenerator
         return claims;
     }
 
-    public Task<List<string>> GetUserRolesAsync(long userId, CancellationToken cancel)
+    private Task<List<string>> GetUserRolesAsync(long userId, CancellationToken cancel)
     {
         return (from u in _database.Set<AppUserRole>()
             where u.UserId == userId

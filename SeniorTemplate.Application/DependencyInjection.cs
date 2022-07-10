@@ -3,7 +3,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using NeerCore.Application.Extensions;
-using NeerCore.Mapping;
 using NeerCore.Mapping.Extensions;
 using SeniorTemplate.Application.Options;
 
@@ -16,9 +15,8 @@ public static class DependencyInjection
         services.AddMediatorApplicationFromCurrentAssembly();
         services.AddHashids(configuration.GetSection("Hashids").Bind);
         services.BindConfigurationOptions(configuration);
-        services.RegisterMappings();
+        services.RegisterMappersFromCurrentAssembly();
     }
-
 
     private static void BindConfigurationOptions(this IServiceCollection services, IConfiguration configuration)
     {
@@ -28,10 +26,5 @@ public static class DependencyInjection
             options.AccessTokenLifetime = TimeSpan.TryParse(configuration["Jwt:AccessTokenLifetime"], out var val) ? val : TimeSpan.FromMinutes(10);
             options.RefreshTokenLifetime = TimeSpan.TryParse(configuration["Jwt:RefreshTokenLifetime"], out val) ? val : TimeSpan.FromDays(30);
         });
-    }
-
-    private static void RegisterMappings(this IServiceCollection services)
-    {
-        services.RegisterMapper<MapperRegister>();
     }
 }

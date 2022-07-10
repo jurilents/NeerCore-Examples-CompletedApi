@@ -6,6 +6,7 @@ using NeerCore.Data.EntityFramework.Abstractions;
 using NeerCore.DependencyInjection;
 using SeniorTemplate.Application.Options;
 using SeniorTemplate.Data.Entities;
+using SeniorTemplate.Infrastructure.Extensions;
 using SeniorTemplate.Infrastructure.Model;
 
 namespace SeniorTemplate.Infrastructure.Services.Internal;
@@ -38,8 +39,8 @@ public class RefreshTokenGenerator
         {
             Token = token,
             UserId = user.Id,
-            // IpAddress = HttpContext.GetIPAddress().ToString(),
-            // UserAgent = HttpContext.GetUserAgent()
+            IpAddress = HttpContext.GetIPAddress().ToString(),
+            UserAgent = HttpContext.GetUserAgent()
         });
 
         await _database.SaveChangesAsync(cancel);
@@ -47,11 +48,8 @@ public class RefreshTokenGenerator
         return new JwtToken(token, expires);
     }
 
-    public bool IsValid(AppRefreshToken token)
-    {
-        return !string.IsNullOrEmpty(token.Token)
-               && token.Created.Add(_options.RefreshTokenLifetime) > DateTime.UtcNow;
-    }
+    public bool IsValid(AppRefreshToken token) =>
+        !string.IsNullOrEmpty(token.Token) && token.Created.Add(_options.RefreshTokenLifetime) > DateTime.UtcNow;
 
     private static string GenerateRandomToken()
     {

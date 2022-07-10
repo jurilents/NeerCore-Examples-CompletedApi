@@ -12,8 +12,8 @@ namespace SeniorTemplate.Api.Controllers;
 public class JwtController : MediatorController
 {
     [HttpPost("check")]
-    public async Task<AuthCheckResult> CheckAsync([FromBody] AuthCheckQuery query, CancellationToken cancel) =>
-        await Mediator.Send(query, cancel);
+    public async Task<AuthCheckResult> CheckAsync([FromBody] AuthCheckQuery query) =>
+        await Mediator.Send(query);
 
     [HttpPost("complete")]
     public async Task<AuthResult> CompleteAsync([FromBody] AuthCompleteCommand command, CancellationToken cancel) =>
