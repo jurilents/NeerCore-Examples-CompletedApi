@@ -8,6 +8,7 @@ internal class AppRoleConfiguration : IEntityTypeConfiguration<AppRole>
 {
     public void Configure(EntityTypeBuilder<AppRole> builder)
     {
+        // TODO: Prefer to use a 'smallint' where it is possible (sqlite does not support)
         // builder.Property(e => e.Id).HasColumnType("smallint");
         builder.Property(e => e.Name).HasMaxLength(64);
         builder.Property(e => e.NormalizedName).HasMaxLength(64);
