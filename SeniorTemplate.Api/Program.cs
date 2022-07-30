@@ -1,45 +1,19 @@
 using NeerCore.Api;
 using NeerCore.Api.Extensions;
 using NeerCore.Api.Extensions.Swagger;
-using NLog;
-using SeniorTemplate.Application;
+using NeerCore.Application.Extensions;
+using NeerCore.DependencyInjection.Extensions;
+using NeerCore.Logging;
+using NeerCore.Logging.Extensions;
+using NeerCore.Mapping.Extensions;
 using SeniorTemplate.Data;
-using SeniorTemplate.Infrastructure;
 
-var logger = LoggerInstaller.InitDefault();
+var logger = LoggerInstaller.InitFromCurrentEnvironment();
 
 try
 {
-    var builder = WebApplication.CreateBuilder(args);
-    ConfigureBuilder(builder);
-    var app = builder.Build();
-    ConfigureWebApp(app);
+    var app = BuildWebApp();
 
-    app.Run();
-}
-catch (Exception e)
-{
-    logger.Fatal(e);
-}
-finally
-{
-    logger.Info("Application is now stopping");
-    LogManager.Shutdown();
-}
-
-// ==========================================
-
-static void ConfigureBuilder(WebApplicationBuilder builder)
-{
-    builder.Services.AddSqlServerDatabase(builder.Configuration);
-    builder.Services.AddApplication(builder.Configuration);
-    builder.Services.AddInfrastructure();
-
-    builder.AddNeerApi();
-}
-
-static void ConfigureWebApp(WebApplication app)
-{
     if (app.Configuration.GetSwaggerSettings().Enabled)
         app.UseCustomSwagger();
 
@@ -50,4 +24,36 @@ static void ConfigureWebApp(WebApplication app)
     app.UseCustomExceptionHandler();
 
     app.MapControllers();
+    app.Run();
+}
+catch (Exception e)
+{
+    logger.Fatal(e);
+}
+finally
+{
+    logger.Info("Application is now stopping");
+    NLog.LogManager.Shutdown();
+}
+
+// ==========================================
+
+WebApplication BuildWebApp()
+{
+    var builder = WebApplication.CreateBuilder(args);
+
+    builder.Logging.ConfigureNLogAsDefault();
+
+    builder.Services.AddSqlServerDatabase(builder.Configuration);
+
+    builder.Services.AddMediatorApplicationFromCurrentAssembly();
+    builder.Services.AddHashids(builder.Configuration.GetSection("Hashids").Bind);
+    builder.Services.ConfigureAllOptions();
+    builder.Services.RegisterAllMappers();
+    builder.Services.AddAllServices();
+
+    builder.Services.AddNeerApiServices();
+    builder.Services.AddNeerControllers();
+
+    return builder.Build();
 }

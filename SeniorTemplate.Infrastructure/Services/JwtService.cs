@@ -10,7 +10,7 @@ using SeniorTemplate.Infrastructure.Services.Internal;
 
 namespace SeniorTemplate.Infrastructure.Services;
 
-[Inject]
+[Injectable]
 public class JwtService : IJwtService
 {
     private readonly IDatabaseContext _database;

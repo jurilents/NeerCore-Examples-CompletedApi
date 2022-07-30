@@ -4,35 +4,35 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using NeerCore.Data.EntityFramework.Abstractions;
 using NeerCore.DependencyInjection;
-using SeniorTemplate.Application.Options;
+using SeniorTemplate.Application.Settings;
 using SeniorTemplate.Data.Entities;
 using SeniorTemplate.Infrastructure.Extensions;
 using SeniorTemplate.Infrastructure.Model;
 
 namespace SeniorTemplate.Infrastructure.Services.Internal;
 
-[Inject]
+[Injectable]
 public class RefreshTokenGenerator
 {
-    private readonly JwtOptions _options;
+    private readonly JwtSettings _settings;
     private readonly IDatabaseContext _database;
     private readonly DbSet<AppRefreshToken> _refreshTokensSet;
     private readonly IHttpContextAccessor _httpContextAccessor;
 
     private HttpContext HttpContext => _httpContextAccessor.HttpContext!;
 
-    public RefreshTokenGenerator(IOptions<JwtOptions> optionsAccessor, IHttpContextAccessor httpContextAccessor,
+    public RefreshTokenGenerator(IOptions<JwtSettings> optionsAccessor, IHttpContextAccessor httpContextAccessor,
         IDatabaseContext database)
     {
         _database = database;
-        _options = optionsAccessor.Value;
+        _settings = optionsAccessor.Value;
         _httpContextAccessor = httpContextAccessor;
         _refreshTokensSet = _database.Set<AppRefreshToken>();
     }
 
     public async Task<JwtToken> GenerateAsync(AppUser user, CancellationToken cancel = default)
     {
-        DateTime expires = DateTime.UtcNow.Add(_options.RefreshTokenLifetime);
+        DateTime expires = DateTime.UtcNow.Add(_settings.RefreshTokenLifetime);
         string token = GenerateRandomToken();
 
         _refreshTokensSet.Add(new AppRefreshToken
@@ -49,7 +49,7 @@ public class RefreshTokenGenerator
     }
 
     public bool IsValid(AppRefreshToken token) =>
-        !string.IsNullOrEmpty(token.Token) && token.Created.Add(_options.RefreshTokenLifetime) > DateTime.UtcNow;
+        !string.IsNullOrEmpty(token.Token) && token.Created.Add(_settings.RefreshTokenLifetime) > DateTime.UtcNow;
 
     private static string GenerateRandomToken()
     {

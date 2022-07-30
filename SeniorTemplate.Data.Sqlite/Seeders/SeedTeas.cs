@@ -1,17 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using NeerCore.Data.EntityFramework.Abstractions;
 using SeniorTemplate.Data.Entities;
 
-namespace SeniorTemplate.Data.SeedData;
+namespace SeniorTemplate.Data.Seeders;
 
-public static partial class SeedExtensions
+public class TeasSeeder : IEntityDataSeeder<Tea>
 {
-    public static void SeedDefaultTeas(this ModelBuilder builder)
-    {
-        builder.Entity<Tea>().HasData(Products);
-    }
-
-
-    private static readonly Tea[] Products =
+    public IEnumerable<Tea> Data => new Tea[]
     {
         new() { Name = "Earl Gray", Price = 20m },
         new() { Name = "Rose Tea", Price = 20m },

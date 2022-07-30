@@ -7,35 +7,35 @@ using Microsoft.IdentityModel.Tokens;
 using NeerCore.Data.EntityFramework.Abstractions;
 using NeerCore.DependencyInjection;
 using NeerCore.Security;
-using SeniorTemplate.Application.Options;
+using SeniorTemplate.Application.Settings;
 using SeniorTemplate.Data.Entities;
 using SeniorTemplate.Infrastructure.Model;
 
 namespace SeniorTemplate.Infrastructure.Services.Internal;
 
-[Inject]
+[Injectable]
 public class AccessTokenGenerator
 {
     private readonly IHashids _hashids;
     private readonly IDatabaseContext _database;
-    private readonly JwtOptions _options;
+    private readonly JwtSettings _settings;
 
-    public AccessTokenGenerator(IOptions<JwtOptions> optionsAccessor, IHashids hashids, IDatabaseContext database)
+    public AccessTokenGenerator(IOptions<JwtSettings> optionsAccessor, IHashids hashids, IDatabaseContext database)
     {
         _hashids = hashids;
         _database = database;
-        _options = optionsAccessor.Value;
+        _settings = optionsAccessor.Value;
     }
 
     public async Task<JwtToken> GenerateAsync(AppUser user, CancellationToken cancel = default)
     {
-        DateTime expires = DateTime.UtcNow.Add(_options.AccessTokenLifetime);
+        DateTime expires = DateTime.UtcNow.Add(_settings.AccessTokenLifetime);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(await GetUserClaimsAsync(user, cancel)),
             Expires = expires,
-            SigningCredentials = new SigningCredentials(_options.Secret, SecurityAlgorithms.HmacSha256Signature),
+            SigningCredentials = new SigningCredentials(_settings.Secret, SecurityAlgorithms.HmacSha256Signature),
             IssuedAt = DateTime.UtcNow,
         };
 
