@@ -46,8 +46,7 @@ WebApplication BuildWebApp()
 
     builder.Services.AddSqlServerDatabase(builder.Configuration);
 
-    // TODO: Fixed in v1.5.0
-    builder.Services.AddMediatorApplicationFromCurrentAssembly();
+    builder.Services.AddMediatorApplication();
     builder.Services.AddHashids(builder.Configuration.GetSection("Hashids").Bind);
     builder.Services.ConfigureAllOptions();
     builder.Services.RegisterAllMappers();
