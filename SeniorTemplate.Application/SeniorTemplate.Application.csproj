@@ -13,8 +13,8 @@
 	<ItemGroup>
 		<PackageReference Include="AspNetCore.Hashids.Int64" Version="2.0.2" />
 		<PackageReference Include="Microsoft.IdentityModel.Tokens" Version="6.22.0" />
-		<PackageReference Include="NeerCore.Application.MediatR" Version="1.4.2" />
-		<PackageReference Include="NeerCore.Mapping.Mapster" Version="1.4.2" />
+		<PackageReference Include="NeerCore.Application.MediatR" Version="1.5.0" />
+		<PackageReference Include="NeerCore.Mapping.Mapster" Version="1.5.0" />
 	</ItemGroup>
 
 	<PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

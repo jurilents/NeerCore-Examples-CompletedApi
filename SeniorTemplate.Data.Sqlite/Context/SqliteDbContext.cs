@@ -19,4 +19,11 @@ public class SqliteDbContext : IdentityDbContext<AppUser, AppRole, int,
         builder.ApplyAllConfigurations();
         builder.ApplyAllDataSeeders();
     }
+
+    protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+    {
+        base.ConfigureConventions(configurationBuilder);
+
+        configurationBuilder.ConfigureDataConversions();
+    }
 }
