@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NeerCore.Data.EntityFramework.Abstractions;
+using NeerCore.Data.EntityFramework.Design;
 using NeerCore.Data.EntityFramework.Extensions;
 using SeniorTemplate.Data.Entities;
 
@@ -16,8 +17,11 @@ public class SqliteDbContext : IdentityDbContext<AppUser, AppRole, int,
     {
         base.OnModelCreating(builder);
 
-        builder.ApplyAllConfigurations();
-        builder.ApplyAllDataSeeders();
+        builder.ConfigureEntities(config =>
+        {
+            config.EngineStrategy = DbEngineStrategy.Sqlite;
+            config.DateTimeKind = DateTimeKind.Utc;
+        });
     }
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
