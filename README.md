@@ -7,6 +7,8 @@ Execute the following command in your terminal to run the app: \
 
 Open Swagger Docs: https://localhost:7300/swagger/index.html
 
+Or alternative ReDoc: https://localhost:7100/docs-v1/index.html
+
 ## Migrate a Database
 
 ### Apply migration
