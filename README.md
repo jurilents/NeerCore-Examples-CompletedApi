@@ -7,13 +7,25 @@ Execute the following command in your terminal to run the app: \
 
 Open Swagger Docs: https://localhost:7300/swagger/index.html
 
+Or alternative ReDoc: https://localhost:7300/docs-v1/index.html
+
 ## Migrate a Database
+
+### Apply migration
 
 Create migration with following command: \
 `dotnet ef migrations add <MigrationName> -p SeniorTemplate.Data.Sqlite`
 
 Apply migrations on database: \
 `dotnet ef database update`
+
+### Rollback migrations
+
+Rollback local migration: \
+`dotnet ef migrations remove`
+
+Rollback migrations on database: \
+`dotnet ef database update <MigrationName>`
 
 ## Additional information
 
